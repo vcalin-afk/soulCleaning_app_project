@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+
+    <style type="text/css">
+        html,
+        body,
+        header {
+            height: 100%;
+        }
+
+        @media (max-width: 740px) {
+
+            html,
+            body,
+            header {
+                height: 1050px;
+            }
+        }
+
+        @media (min-width: 800px) and (max-width: 850px) {
+
+            html,
+            body,
+            header {
+                height: 700px;
+            }
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .wrapper {
+            min-height: 100%;
+
+            /* Equal to height of footer */
+            /* But also accounting for potential margin-bottom of last child */
+            margin-bottom: -50px;
+        }
+
+        .page-footer,
+        .push {
+            height: 50px;
+        }
+
+        .text_color_cyan_lighten {
+            color: #4dd0e1;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark mdb-color">
+
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="dashboard">SoulCleaner</a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="dashboard">Home
+
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="myCleaningSessions">My SoulCleaning Sessions
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- Collapsible content -->
+
+</nav>
+<!--/.Navbar-->
+
+<!--Main layout-->
+<div class="wrapper">
+<main>
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center my-5"><u>My SoulCleaning Sessions</u></h1>
+            </div>
+        </div>
+
+        <div id="card-deck-row" class="row">
+            <div class="col-4" th:each="cs : ${allCleaningSessions}">
+                <div class="card-deck">
+                    <div class="card cyan lighten-2 text-white mb-3">
+                        <div class="card-header">SoulCleaning Session</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Session #<span th:text="${cs.id}"></span></h5>
+                            <p class="card-text text-white">Default website: <span class="text-white">Danbooru</span></p>
+                            <p class="card-text text-white">Tag chosen: <span class="text-white" th:text="${cs.tag_name}"></span></p>
+                            <p class="card-text text-white">Number of pages: <span class="text-white" th:text="${cs.page_count}"></span></p>
+                            <p class="card-text text-white">Number of pictures: <span class="text-white" th:text="${cs.picture_count}"></span></p>
+                            <button type="button" class="btn btn-danger btn-sm btn-block mt-5" th:id="${cs.id}" onclick="deleteSoulCleaningSession(this.id)">Delete SoulCleaning Session</button>
+                        </div>
+                        <div class="card-footer">
+                            <small><strong>You have saved <span th:text="${cs.seconds_count}"></span> seconds. Keep going!</strong></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-circle pagination-lg justify-content-center pg-purple">
+                <li class="page-item">
+                    <a id="prevPage" class="page-link" tabindex="-1" th:href="${prevPage}">Previous</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link">Main Page <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item ">
+                    <a id="nextPage" class="page-link" th:href="${nextPage}">Next</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+</main>
+    <div class="push"></div>
+</div>
+
+<!-- Footer -->
+<footer class="page-footer font-small mt-5 mdb-color">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center" style="padding-bottom: 0.8rem; padding-top: 0.9rem">© 2020 Copyright:
+        <a href="dashboard"> SoulCleaner</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="jquery.twbsPagination.js"></script>
+
+<script>
+    $('#prevPage').mouseenter(function(e) {
+        if ($('#prevPage').attr('href') === "http://localhost:8080/myCleaningSessions?pageNumber=-1") {
+            $('.page-item:first').addClass('disabled');
+            e.preventDefault();
+        }
+    });
+
+    $('#nextPage').mouseenter(function(e) {
+        if ($('#card-deck-row').children().length < 6) {
+            $('.page-item:last').addClass('disabled');
+            e.preventDefault();
+        }
+    });
+
+    var soulCleaningSessionJumbotron = "<div id=\"soulCleaningSessionJumbotron\" class=\"jumbotron text-center hoverable p-4\"></div>";
+    var soulCleaningSessionRow = "<div id=\"soulCleaningSessionRow\" class=\"row\"></div>";
+
+    var soulCleaningSessionCol1 = '<div id="soulCleaningSessionCol1" class="col-md-4 offset-md-1 mx-3 my-3"></div>';
+    var soulCleaningSessionCol1_1 = '<div id="soulCleaningSessionCol1-1" class="col-4"></div>';
+    var soulCleaningSessionCol1_1Img = '<img class="ml-5" src="img/android_miku.jpg" style="width: 250px"\n alt="Placeholder">';
+
+    var soulCleaningSessionCol2 = '<div id="soulCleaningSessionCol2" class="col-md-7 text-md-left ml-3 mt-3"></div>';
+    var soulCleaningSessionCol2Blockquote = '<blockquote id="soulCleaningSessionBlockquote" class="blockquote text-center" style="margin-top: 1.5rem"></blockquote>';
+    var soulCleaningSessionCol2Paragraph = '<p class="mb-0">Your next SoulCleaning Sessions will be present here!</p>';
+    var soulCleaningSessionCol2Footer = '<footer class="blockquote-footer mb-3 text_color_cyan_lighten">Your assistant</footer>';
+
+    if ($('#card-deck-row').children().length < 1) {
+        $('#card-deck-row').after(soulCleaningSessionJumbotron);
+        $('#soulCleaningSessionJumbotron').append(soulCleaningSessionRow);
+        $('#soulCleaningSessionRow').append(soulCleaningSessionCol1).append(soulCleaningSessionCol2);
+
+        $('#soulCleaningSessionCol1').append(soulCleaningSessionCol1_1).append(soulCleaningSessionCol1_1Img);
+
+        $('#soulCleaningSessionCol2').append(soulCleaningSessionCol2Blockquote);
+        $('#soulCleaningSessionBlockquote').append(soulCleaningSessionCol2Paragraph).append(soulCleaningSessionCol2Footer);
+    }
+
+    $('li').click(function() {
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+
+    function deleteSoulCleaningSession(soulCleaningSessionId) {
+        $.post("http://localhost:8080/myCleaningSessions/delete-soulcleaningsession?id=" + soulCleaningSessionId);
+
+        $("#" + soulCleaningSessionId).parent().parent().parent().parent().remove();
+    }
+
+
+</script>
+
+</body>
+</html>

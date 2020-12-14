@@ -51,7 +51,7 @@ public class SoulCleaningSessionController {
         modelAndView.addObject("soulCleaningSessionList", soulCleaningSessionService.getLastCleaningSession());
         modelAndView.addObject("messageFinishProcess", "Congratulations! You have saved <span class=\"text_color_cyan_lighten\">" +
                 timeService.getNumberOfSecondForSoulCleaningSession() + " seconds</span> from your life. You are now one step closer to reaching your goal. " +
-                "I'm looking forward for our next session!");
+                "I'm looking forward to our next session!");
         if (option.equals("")){
             modelAndView.addObject("tagChosen", "No Tag");
         } else {

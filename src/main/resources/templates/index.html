@@ -28,6 +28,53 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style type="text/css">
+
+        /*// Extra small devices (portrait phones, less than 576px)*/
+        @media (max-width: 575px) {
+
+        }
+
+        /*// Small devices (landscape phones, 576px and up)*/
+        @media (min-width: 576px) and (max-width: 767px) {
+            .col-4 {
+                margin-left: 4rem;
+            }
+
+            .col-8 {
+                margin-left: 6rem;
+                margin-top: 2rem;
+            }
+        }
+
+        /*// Medium devices (tablets, 768px and up)*/
+        @media (min-width: 768px) and (max-width: 991px) {
+            .col-4 img {
+                margin-top: 1rem;
+            }
+
+            .col-8 blockquote {
+                margin-left: 7rem;
+                margin-top: 0;
+            }
+        }
+
+        /*// Large devices (desktops, 992px and up)*/
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .col-8 .blockquote {
+                margin-top: 1rem;
+                margin-left: 4rem;
+            }
+        }
+
+        /*// Extra large devices (large desktops, 1200px and up)*/
+        @media (min-width: 1200px) {
+            .col-8 .blockquote {
+                margin-top: 1.5rem;
+            }
+        }
+
+
+
         html,
         body,
         header,
@@ -52,12 +99,6 @@
             header,
             .view {
                 height: 700px;
-            }
-        }
-
-        @media (min-width: 800px) and (max-width: 850px) {
-            .navbar:not(.top-nav-collapse) {
-                background: #1C2331 !important;
             }
         }
 
@@ -168,6 +209,8 @@
         .push {
             height: 50px;
         }
+
+
 
     </style>
 
@@ -327,7 +370,7 @@
                                              alt="Placeholder">
                                     </div>
                                     <div class="col-8">
-                                        <blockquote class="blockquote text-center" style="margin-top: 1.5rem">
+                                        <blockquote class="blockquote text-center">
                                             <p class="mb-0" th:utext="${messageFinishProcess}"></p>
                                             <footer class="blockquote-footer mb-3 text_color_cyan_lighten">Your
                                                 assistant

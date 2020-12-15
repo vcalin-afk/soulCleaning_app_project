@@ -85,16 +85,4 @@ public class SoulCleaningSessionController {
 
         return "ok";
     }
-
-    @GetMapping("getSessionsForAjax")
-    @ResponseBody
-    public List<SoulCleaningSession> getSessionsForAjax() {
-        return soulCleaningSessionService.getAllCleaningSessions();
-    }
-
-    @GetMapping("test")
-    @ResponseBody
-    public void test() {
-
-    }
 }

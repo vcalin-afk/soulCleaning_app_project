@@ -207,17 +207,21 @@
 
 <script>
     $('#prevPage').mouseenter(function(e) {
+
         if ($('#prevPage').attr('href') === "http://localhost:8080/myCleaningSessions?pageNumber=-1") {
             $('.page-item:first').addClass('disabled');
             e.preventDefault();
         }
+
     });
 
     $('#nextPage').mouseenter(function(e) {
+
         if ($('#card-deck-row').children().length < 6) {
             $('.page-item:last').addClass('disabled');
             e.preventDefault();
         }
+
     });
 
     var soulCleaningSessionJumbotron = "<div id=\"soulCleaningSessionJumbotron\" class=\"jumbotron text-center hoverable p-4\"></div>";
@@ -233,6 +237,7 @@
     var soulCleaningSessionCol2Footer = '<footer class="blockquote-footer mb-3 text_color_cyan_lighten">Your assistant</footer>';
 
     if ($('#card-deck-row').children().length < 1) {
+
         $('#card-deck-row').after(soulCleaningSessionJumbotron);
         $('#soulCleaningSessionJumbotron').append(soulCleaningSessionRow);
         $('#soulCleaningSessionRow').append(soulCleaningSessionCol1).append(soulCleaningSessionCol2);
@@ -241,16 +246,24 @@
 
         $('#soulCleaningSessionCol2').append(soulCleaningSessionCol2Blockquote);
         $('#soulCleaningSessionBlockquote').append(soulCleaningSessionCol2Paragraph).append(soulCleaningSessionCol2Footer);
+
     }
 
     $('li').click(function() {
+
         $(this).addClass('active').siblings().removeClass('active');
+
     });
 
     function deleteSoulCleaningSession(soulCleaningSessionId) {
-        $.post("http://localhost:8080/myCleaningSessions/delete-soulcleaningsession?id=" + soulCleaningSessionId);
+
+        $.ajax({
+            url: "http://localhost:8080/myCleaningSessions/delete-soulcleaningsession?id=" + soulCleaningSessionId,
+            type: 'DELETE',
+        });
 
         $("#" + soulCleaningSessionId).parent().parent().parent().parent().remove();
+
     }
 
 

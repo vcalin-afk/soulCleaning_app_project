@@ -2,10 +2,7 @@ package ro.calin.SoulCleaner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ro.calin.SoulCleaner.database.SoulCleaningSession;
 import ro.calin.SoulCleaner.database.SoulCleaningSessionDAO;
@@ -78,7 +75,7 @@ public class SoulCleaningSessionController {
         return new ModelAndView("index");
     }
 
-    @PostMapping("myCleaningSessions/delete-soulcleaningsession")
+    @DeleteMapping("myCleaningSessions/delete-soulcleaningsession")
     @ResponseBody
     public String deleteSoulCleaningSession(@RequestParam("id") int soulCleaningSessionId) {
         soulCleaningSessionService.deleteSoulCleaningSession(soulCleaningSessionId);

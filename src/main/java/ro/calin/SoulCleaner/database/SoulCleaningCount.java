@@ -3,7 +3,7 @@ package ro.calin.SoulCleaner.database;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SeleniumConnection {
+public class SoulCleaningCount {
 
     private int countPictures;
 
@@ -14,4 +14,5 @@ public class SeleniumConnection {
     public void setCountPictures(int countPictures) {
         this.countPictures = countPictures;
     }
+
 }

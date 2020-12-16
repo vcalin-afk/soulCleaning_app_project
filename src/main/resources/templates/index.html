@@ -13,6 +13,8 @@
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="soulCleaner_app.css">
+
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -70,35 +72,6 @@
         @media (min-width: 1200px) {
             .col-8 .blockquote {
                 margin-top: 1.5rem;
-            }
-        }
-
-
-
-        html,
-        body,
-        header,
-        .view {
-            height: 100%;
-        }
-
-        @media (max-width: 740px) {
-
-            html,
-            body,
-            header,
-            .view {
-                height: 1050px;
-            }
-        }
-
-        @media (min-width: 800px) and (max-width: 850px) {
-
-            html,
-            body,
-            header,
-            .view {
-                height: 700px;
             }
         }
 
@@ -188,59 +161,22 @@
             }
         }
 
-        .text_color_cyan_lighten {
-            color: #4dd0e1;
-        }
-
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-
-        .wrapper {
-            min-height: 100%;
-
-            /* Equal to height of footer */
-            /* But also accounting for potential margin-bottom of last child */
-            margin-bottom: -50px;
-        }
-
-        .page-footer,
-        .push {
-            height: 50px;
-        }
-
-
-
     </style>
 
-    <script>
-        $(document).ready(function () {
-            $("#btn_activate").click(function () {
-                $("#btn_activate").html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
-            });
-        });
-
-    </script>
 </head>
 <body>
 
-<!--Navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark mdb-color">
 
-    <!-- Navbar brand -->
     <a class="navbar-brand" href="dashboard">SoulCleaner</a>
 
-    <!-- Collapse button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
             aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Collapsible content -->
     <div class="collapse navbar-collapse" id="basicExampleNav">
 
-        <!-- Links -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="dashboard">Home
@@ -253,43 +189,29 @@
             </li>
         </ul>
     </div>
-    <!-- Collapsible content -->
 
 </nav>
-<!--/.Navbar-->
 
-<!--Main layout-->
 <div class="wrapper">
+
     <main>
+
         <div class="container">
 
-            <!--Section: Main info-->
             <section class="mt-5 wow fadeIn">
 
-                <!--Grid row-->
                 <div class="row">
-
-                    <!--Grid column-->
                     <div class="col-md-6 mb-4">
-
                         <img src="img/android_miku.jpg" class="img-fluid hoverable" alt=""
                              style="width: 100%; height: 300px">
-
                     </div>
-                    <!--Grid column-->
-
-                    <!--Grid column-->
                     <div class="col-md-6 mb-4">
-
-                        <!-- Main heading -->
                         <h3 class="h3 mb-3">Welcome, man of culture! Everything is ready.</h3>
                         <p>Default website is <span class="text_color_cyan_lighten">Danbooru</span>. Pick one <span
                                 class="text_color_cyan_lighten">tag</span>
                             from left side and how many <span class="text_color_cyan_lighten">pages</span> from right
                             side, and I
                             will take care of the rest for you.</p>
-                        <!-- Main heading -->
-
                         <hr>
 
                         <form method="get" action="/activate-session">
@@ -317,39 +239,35 @@
                                                 class="plus"></button>
                                     </div>
                                 </div>
+
                             </div>
 
                             <div class="row">
+
                                 <div class="col">
                                     <p class="text-danger" th:text="${invalidOption}"></p>
                                 </div>
+
                             </div>
 
                             <!-- CTA -->
-                            <button class="btn cyan lighten-2 text-white" id="btn_activate" type="submit">Activate
-                            </button>
+                            <button class="btn cyan lighten-2 text-white" id="btn_activate" type="submit">Activate</button>
                         </form>
-
                     </div>
-                    <!--Grid column-->
 
                 </div>
-                <!--Grid row-->
 
             </section>
-            <!--Section: Main info-->
 
             <hr>
 
             <div class="row">
+
                 <div class="col">
-                    <!-- Jumbotron -->
                     <div class="card card-image" style="background-image: url(img/results.png);"
                          th:each="cs : ${soulCleaningSessionList}">
                         <div class="text-white text-center rgba-stylish-strong py-5 px-4">
                             <div class="py-5">
-
-                                <!-- Content -->
                                 <h5 class="h5 text-success" th:utext="${messageSuccessful}"></h5>
                                 <h2 class="card-title h2 my-4 py-2">Here are the results</h2>
                                 <p class="mb-4 pb-2 px-md-5 mx-md-5">Default website: <span
@@ -365,10 +283,12 @@
                                 <hr style="border-top: 1px solid #4dd0e1">
 
                                 <div class="row mt-5">
+
                                     <div class="col-4">
                                         <img class="ml-5 hoverable" src="img/android_miku.jpg" style="width: 250px"
                                              alt="Placeholder">
                                     </div>
+
                                     <div class="col-8">
                                         <blockquote class="blockquote text-center">
                                             <p class="mb-0" th:utext="${messageFinishProcess}"></p>
@@ -377,33 +297,41 @@
                                             </footer>
                                         </blockquote>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Jumbotron -->
                 </div>
+
             </div>
 
-
         </div>
+
     </main>
+
     <div class="push"></div>
+
 </div>
 
-<!-- Footer -->
 <footer class="page-footer font-small mdb-color mt-5">
 
-    <!-- Copyright -->
     <div class="footer-copyright text-center" style="padding-bottom: 0.8rem; padding-top: 0.9rem">© 2020 Copyright:
         <a href="dashboard"> SoulCleaner</a>
     </div>
-    <!-- Copyright -->
 
 </footer>
-<!-- Footer -->
 
+<script>
+    $(document).ready(function () {
+
+        $("#btn_activate").click(function () {
+            $("#btn_activate").html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+        });
+
+    });
+
+</script>
 
 </body>
 </html>

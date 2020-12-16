@@ -13,6 +13,8 @@
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="soulCleaner_app.css">
+
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -28,6 +30,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style type="text/css">
+
         /*// Extra small devices (portrait phones, less than 576px)*/
         @media (max-width: 575px) {
             #soulCleaningSessionCol1 img {
@@ -47,64 +50,16 @@
             #soulCleaningSessionBlockquote {
                 margin-left: 4rem;
             }
-
         }
 
         /*// Large devices (desktops, 992px and up)*/
         @media (min-width: 992px) and (max-width: 1199px) {
-            ...
+
         }
 
         /*// Extra large devices (large desktops, 1200px and up)*/
         @media (min-width: 1200px) {
-            ...
-        }
 
-
-        html,
-        body,
-        header {
-            height: 100%;
-        }
-
-        @media (max-width: 740px) {
-
-            html,
-            body,
-            header {
-                height: 1050px;
-            }
-        }
-
-        @media (min-width: 800px) and (max-width: 850px) {
-
-            html,
-            body,
-            header {
-                height: 700px;
-            }
-        }
-
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-
-        .wrapper {
-            min-height: 100%;
-
-            /* Equal to height of footer */
-            /* But also accounting for potential margin-bottom of last child */
-            margin-bottom: -50px;
-        }
-
-        .page-footer,
-        .push {
-            height: 50px;
-        }
-
-        .text_color_cyan_lighten {
-            color: #4dd0e1;
         }
 
         #sortingSelect {
@@ -116,22 +71,17 @@
 </head>
 <body>
 
-<!--Navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark mdb-color">
 
-    <!-- Navbar brand -->
     <a class="navbar-brand" href="dashboard">SoulCleaner</a>
 
-    <!-- Collapse button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
             aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Collapsible content -->
     <div class="collapse navbar-collapse" id="basicExampleNav">
 
-        <!-- Links -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="dashboard">Home
@@ -145,14 +95,13 @@
             </li>
         </ul>
     </div>
-    <!-- Collapsible content -->
 
 </nav>
-<!--/.Navbar-->
 
-<!--Main layout-->
 <div class="wrapper">
+
     <main>
+
         <div class="container">
 
             <div class="row">
@@ -173,7 +122,9 @@
                                         <option value="sortSessionLastToFirst">Session: Last to First</option>
                                     </select>
                                 </label>
-                                <button class="btn btn-sm cyan lighten-2 text-white" id="btn_activate" type="submit">Select option</button>
+                                <button class="btn btn-sm cyan lighten-2 text-white" id="btn_activate" type="submit">
+                                    Select option
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -226,20 +177,18 @@
 
         </div>
     </main>
+
     <div class="push"></div>
+
 </div>
 
-<!-- Footer -->
 <footer class="page-footer font-small mt-5 mdb-color">
 
-    <!-- Copyright -->
     <div class="footer-copyright text-center" style="padding-bottom: 0.8rem; padding-top: 0.9rem">© 2020 Copyright:
         <a href="dashboard"> SoulCleaner</a>
     </div>
-    <!-- Copyright -->
 
 </footer>
-<!-- Footer -->
 
 <script>
 
@@ -285,7 +234,6 @@
     var soulCleaningSessionCol2Footer = '<footer class="blockquote-footer mb-3 text_color_cyan_lighten">Your assistant</footer>';
 
     if ($('#card-deck-row').children().length < 1) {
-
         $('#card-deck-row').after(soulCleaningSessionJumbotron);
         $('#soulCleaningSessionJumbotron').append(soulCleaningSessionRow);
         $('#soulCleaningSessionRow').append(soulCleaningSessionCol1).append(soulCleaningSessionCol2);
@@ -294,7 +242,6 @@
 
         $('#soulCleaningSessionCol2').append(soulCleaningSessionCol2Blockquote);
         $('#soulCleaningSessionBlockquote').append(soulCleaningSessionCol2Paragraph).append(soulCleaningSessionCol2Footer);
-
     }
 
     $('li').click(function () {
@@ -313,7 +260,6 @@
         $("#" + soulCleaningSessionId).parent().parent().parent().parent().remove();
 
     }
-
 
 </script>
 

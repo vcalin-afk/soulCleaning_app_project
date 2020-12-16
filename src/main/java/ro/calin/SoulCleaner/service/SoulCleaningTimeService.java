@@ -2,17 +2,19 @@ package ro.calin.SoulCleaner.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ro.calin.SoulCleaner.database.Time;
+import ro.calin.SoulCleaner.database.SoulCleaningTime;
 
 import java.time.Duration;
 
 @Service
-public class TimeService {
+public class SoulCleaningTimeService {
 
     @Autowired
-    Time time;
+    SoulCleaningTime soulCleaningTime;
 
     public long getNumberOfSecondForSoulCleaningSession() {
-        return Duration.between(time.getInitialTime(), time.getFinalTime()).getSeconds();
+
+        return Duration.between(soulCleaningTime.getInitialTime(), soulCleaningTime.getFinalTime()).getSeconds();
     }
+
 }

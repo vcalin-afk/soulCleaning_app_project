@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import ro.calin.SoulCleaner.database.SoulCleaningSession;
 import ro.calin.SoulCleaner.database.SoulCleaningSessionDAO;
-import ro.calin.SoulCleaner.database.SeleniumConnection;
-import ro.calin.SoulCleaner.database.Time;
+import ro.calin.SoulCleaner.database.SoulCleaningCount;
+import ro.calin.SoulCleaner.database.SoulCleaningTime;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,21 +20,23 @@ import java.util.List;
 public class SoulCleaningSessionService {
 
     @Autowired
-    SeleniumConnection seleniumConnection;
+    SoulCleaningCount soulCleaningCount;
 
     @Autowired
     SoulCleaningSessionDAO soulCleaningSessionDAO;
 
     @Autowired
-    Time time;
+    SoulCleaningTime soulCleaningTime;
 
     public void connect() {
-        System.setProperty("webdriver.gecko.driver", "F:/geckodriver.exe");
+
+        System.setProperty("webdriver.gecko.driver", "C:\\Users\\Calin Valentin\\IdeaProjects\\SoulCleaner\\src\\main\\resources\\static/geckodriver.exe");
 
     }
 
     public void startCleaningSession(String option, int numberofPages) {
-        time.setInitialTime(LocalTime.now());
+
+        soulCleaningTime.setInitialTime(LocalTime.now());
 
         FirefoxDriver firefoxDriver = new FirefoxDriver();
 
@@ -77,11 +77,14 @@ public class SoulCleaningSessionService {
                 }
             }
         }
-        seleniumConnection.setCountPictures(countPictures);
-        time.setFinalTime(LocalTime.now());
+
+        soulCleaningCount.setCountPictures(countPictures);
+        soulCleaningTime.setFinalTime(LocalTime.now());
+
     }
 
     public void saveCleaningSession(String option, int numberOfPages, long numberOfSeconds, int numberOfPictures) {
+
         SoulCleaningSession soulCleaningSession = new SoulCleaningSession();
         if (option.equals("")){
             soulCleaningSession.setTag_name("No Tag");
@@ -94,9 +97,11 @@ public class SoulCleaningSessionService {
         soulCleaningSession.setSite("Danbooru");
 
         soulCleaningSessionDAO.save(soulCleaningSession);
+
     }
 
     public List<SoulCleaningSession> getLastCleaningSession() {
+
         List<SoulCleaningSession> soulCleaningSessions = this.findDesc();
 
         List<SoulCleaningSession> lastSoulCleaningSessionList = new ArrayList<>();
@@ -106,42 +111,40 @@ public class SoulCleaningSessionService {
             break;
         }
         return lastSoulCleaningSessionList;
-    }
 
-    public List<SoulCleaningSession> getAllCleaningSessions() {
-        Iterable<SoulCleaningSession> cleaningSessions = soulCleaningSessionDAO.findAll();
-
-        List<SoulCleaningSession> soulCleaningSessionList = new ArrayList<>();
-
-        for (SoulCleaningSession soulCleaningSession : cleaningSessions) {
-            soulCleaningSessionList.add(soulCleaningSession);
-        }
-
-        return soulCleaningSessionList;
     }
 
     public void deleteSoulCleaningSession(int soulCleaningSessionId) {
+
         soulCleaningSessionDAO.deleteById(soulCleaningSessionId);
+
     }
 
     public List<SoulCleaningSession> findDesc() {
+
         return soulCleaningSessionDAO.findByOrderByIdDesc();
 
     }
 
     public Page<SoulCleaningSession> getAllByPage(int pageNumber) {
+
         Pageable firstPage = PageRequest.of(pageNumber,6);
 
         return soulCleaningSessionDAO.findAll(firstPage);
+
     }
 
     public Page<SoulCleaningSession> getAllByPageDesc(int pageNumber) {
+
         Pageable firstPage = PageRequest.of(pageNumber,6);
 
         return soulCleaningSessionDAO.findByOrderByIdDesc(firstPage);
+
     }
 
     public void setSoulCleaningSessionDAO(SoulCleaningSessionDAO soulCleaningSessionDAO) {
+
         this.soulCleaningSessionDAO = soulCleaningSessionDAO;
+
     }
 }

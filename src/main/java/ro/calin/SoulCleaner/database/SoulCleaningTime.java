@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 
 @Component
-public class Time {
+public class SoulCleaningTime {
 
-    public LocalTime initialTime;
+    private LocalTime initialTime;
 
-    public LocalTime finalTime;
+    private LocalTime finalTime;
 
     public LocalTime getInitialTime() {
         return initialTime;
@@ -26,4 +26,5 @@ public class Time {
     public void setFinalTime(LocalTime finalTime) {
         this.finalTime = finalTime;
     }
+
 }

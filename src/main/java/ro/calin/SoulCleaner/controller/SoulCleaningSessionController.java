@@ -5,28 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ro.calin.SoulCleaner.database.SoulCleaningSession;
-import ro.calin.SoulCleaner.database.SoulCleaningSessionDAO;
-import ro.calin.SoulCleaner.database.SeleniumConnection;
+import ro.calin.SoulCleaner.database.SoulCleaningCount;
 import ro.calin.SoulCleaner.service.SoulCleaningSessionService;
-import ro.calin.SoulCleaner.service.TimeService;
-
-import java.util.List;
+import ro.calin.SoulCleaner.service.SoulCleaningTimeService;
 
 @Controller
 public class SoulCleaningSessionController {
 
     @Autowired
-    SeleniumConnection seleniumConnection;
+    SoulCleaningCount soulCleaningCount;
 
     @Autowired
     SoulCleaningSessionService soulCleaningSessionService;
 
     @Autowired
-    SoulCleaningSessionDAO soulCleaningSessionDAO;
-
-    @Autowired
-    TimeService timeService;
+    SoulCleaningTimeService soulCleaningTimeService;
 
     @GetMapping("/activate-session")
     public ModelAndView activateSession(@RequestParam("options") String option,
@@ -49,12 +42,12 @@ public class SoulCleaningSessionController {
         }
 
 
-        soulCleaningSessionService.saveCleaningSession(option, numberofPages, timeService.getNumberOfSecondForSoulCleaningSession(), seleniumConnection.getCountPictures());
+        soulCleaningSessionService.saveCleaningSession(option, numberofPages, soulCleaningTimeService.getNumberOfSecondForSoulCleaningSession(), soulCleaningCount.getCountPictures());
 
         modelAndView.addObject("messageSuccessful", "<i class=\"fas fa-check-circle mr-2\"></i>SoulCleaning is successful!");
         modelAndView.addObject("soulCleaningSessionList", soulCleaningSessionService.getLastCleaningSession());
         modelAndView.addObject("messageFinishProcess", "Congratulations! You have saved <span class=\"text_color_cyan_lighten\">" +
-                timeService.getNumberOfSecondForSoulCleaningSession() + " seconds</span> from your life. You are now one step closer to reaching your goal. " +
+                soulCleaningTimeService.getNumberOfSecondForSoulCleaningSession() + " seconds</span> from your life. You are now one step closer to reaching your goal. " +
                 "I'm looking forward to our next session!");
         if (option.equals("")){
             modelAndView.addObject("tagChosen", "No Tag");
@@ -83,21 +76,24 @@ public class SoulCleaningSessionController {
             modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber + 1));
         }
 
-
-
         return modelAndView;
+
     }
 
     @GetMapping("dashboard")
     public ModelAndView showIndexPage() {
+
         return new ModelAndView("index");
+
     }
 
     @DeleteMapping("myCleaningSessions/delete-soulcleaningsession")
     @ResponseBody
     public String deleteSoulCleaningSession(@RequestParam("id") int soulCleaningSessionId) {
+
         soulCleaningSessionService.deleteSoulCleaningSession(soulCleaningSessionId);
 
         return "ok";
+
     }
 }

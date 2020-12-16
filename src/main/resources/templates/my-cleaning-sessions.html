@@ -51,10 +51,14 @@
         }
 
         /*// Large devices (desktops, 992px and up)*/
-        @media (min-width: 992px) and (max-width: 1199px) { ... }
+        @media (min-width: 992px) and (max-width: 1199px) {
+            ...
+        }
 
         /*// Extra large devices (large desktops, 1200px and up)*/
-        @media (min-width: 1200px) { ... }
+        @media (min-width: 1200px) {
+            ...
+        }
 
 
         html,
@@ -103,6 +107,10 @@
             color: #4dd0e1;
         }
 
+        #sortingSelect {
+            width: 18.3rem;
+        }
+
     </style>
 
 </head>
@@ -144,52 +152,80 @@
 
 <!--Main layout-->
 <div class="wrapper">
-<main>
-    <div class="container">
+    <main>
+        <div class="container">
 
-        <div class="row">
-            <div class="col">
-                <h1 class="text-center my-5"><u>My SoulCleaning Sessions</u></h1>
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center my-5"><u>My SoulCleaning Sessions</u></h1>
+                </div>
             </div>
-        </div>
 
-        <div id="card-deck-row" class="row">
-            <div class="col-4" th:each="cs : ${allCleaningSessions}">
-                <div class="card-deck">
-                    <div class="card cyan lighten-2 text-white mb-3">
-                        <div class="card-header">SoulCleaning Session</div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Session #<span th:text="${cs.id}"></span></h5>
-                            <p class="card-text text-white">Default website: <span class="text-white">Danbooru</span></p>
-                            <p class="card-text text-white">Tag chosen: <span class="text-white" th:text="${cs.tag_name}"></span></p>
-                            <p class="card-text text-white">Number of pages: <span class="text-white" th:text="${cs.page_count}"></span></p>
-                            <p class="card-text text-white">Number of pictures: <span class="text-white" th:text="${cs.picture_count}"></span></p>
-                            <button type="button" class="btn btn-danger btn-sm btn-block mt-5" th:id="${cs.id}" onclick="deleteSoulCleaningSession(this.id)">Delete SoulCleaning Session</button>
-                        </div>
-                        <div class="card-footer">
-                            <small><strong>You have saved <span th:text="${cs.seconds_count}"></span> seconds. Keep going!</strong></small>
+                            <form>
+                                <span>Sort by:</span>
+                                <label for="sortingSelect">
+                                    <select id="sortingSelect" class="browser-default custom-select" name="option">
+                                        <option value="sortSessionFirstToLast" selected>Session: First to Last</option>
+                                        <option value="sortSessionLastToFirst">Session: Last to First</option>
+                                    </select>
+                                </label>
+                                <button class="btn btn-sm cyan lighten-2 text-white" id="btn_activate" type="submit">Select option</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div id="card-deck-row" class="row">
+                <div class="col-4" th:each="cs : ${allCleaningSessions}">
+                    <div class="card-deck">
+                        <div class="card cyan lighten-2 text-white mb-3">
+                            <div class="card-header">SoulCleaning Session</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Session #<span th:text="${cs.id}"></span></h5>
+                                <p class="card-text text-white">Default website: <span
+                                        class="text-white">Danbooru</span></p>
+                                <p class="card-text text-white">Tag chosen: <span class="text-white"
+                                                                                  th:text="${cs.tag_name}"></span></p>
+                                <p class="card-text text-white">Number of pages: <span class="text-white"
+                                                                                       th:text="${cs.page_count}"></span>
+                                </p>
+                                <p class="card-text text-white">Number of pictures: <span class="text-white"
+                                                                                          th:text="${cs.picture_count}"></span>
+                                </p>
+                                <button type="button" class="btn btn-danger btn-sm btn-block mt-5" th:id="${cs.id}"
+                                        onclick="deleteSoulCleaningSession(this.id)">Delete SoulCleaning Session
+                                </button>
+                            </div>
+                            <div class="card-footer">
+                                <small><strong>You have saved <span th:text="${cs.seconds_count}"></span> seconds. Keep
+                                    going!</strong></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-circle pagination-lg justify-content-center pg-purple">
+                    <li class="page-item">
+                        <a id="prevPage" class="page-link" tabindex="-1" th:href="${prevPage}">Previous</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link">Main Page <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="page-item ">
+                        <a id="nextPage" class="page-link" th:href="${nextPage}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
         </div>
-
-        <nav aria-label="Page navigation example">
-            <ul class="pagination pagination-circle pagination-lg justify-content-center pg-purple">
-                <li class="page-item">
-                    <a id="prevPage" class="page-link" tabindex="-1" th:href="${prevPage}">Previous</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link">Main Page <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item ">
-                    <a id="nextPage" class="page-link" th:href="${nextPage}">Next</a>
-                </li>
-            </ul>
-        </nav>
-
-    </div>
-</main>
+    </main>
     <div class="push"></div>
 </div>
 
@@ -206,16 +242,28 @@
 <!-- Footer -->
 
 <script>
-    $('#prevPage').mouseenter(function(e) {
 
-        if ($('#prevPage').attr('href') === "http://localhost:8080/myCleaningSessions?pageNumber=-1") {
+    if ($('#prevPage').attr('href').indexOf("sortSessionFirstToLast") >= 0) {
+        $("#sortingSelect option:nth-child(2)").removeAttr("selected");
+        $("#sortingSelect option:nth-child(1)").attr("selected", "selected");
+    } else if ($('#prevPage').attr('href').indexOf("sortSessionLastToFirst") >= 0) {
+        $("#sortingSelect option:nth-child(1)").removeAttr("selected");
+        $("#sortingSelect option:nth-child(2)").attr("selected", "selected");
+    }
+
+    $('#prevPage').mouseenter(function (e) {
+
+        if ($('#prevPage').attr('href') === "http://localhost:8080/myCleaningSessions?option=sortSessionLastToFirst&pageNumber=-1") {
+            $('.page-item:first').addClass('disabled');
+            e.preventDefault();
+        } else if ($('#prevPage').attr('href') === "http://localhost:8080/myCleaningSessions?option=sortSessionFirstToLast&pageNumber=-1") {
             $('.page-item:first').addClass('disabled');
             e.preventDefault();
         }
 
     });
 
-    $('#nextPage').mouseenter(function(e) {
+    $('#nextPage').mouseenter(function (e) {
 
         if ($('#card-deck-row').children().length < 6) {
             $('.page-item:last').addClass('disabled');
@@ -249,7 +297,7 @@
 
     }
 
-    $('li').click(function() {
+    $('li').click(function () {
 
         $(this).addClass('active').siblings().removeClass('active');
 

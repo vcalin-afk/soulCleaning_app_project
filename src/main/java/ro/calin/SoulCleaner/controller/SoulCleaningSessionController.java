@@ -1,5 +1,6 @@
 package ro.calin.SoulCleaner.controller;
 
+import org.openqa.selenium.NoSuchWindowException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,13 @@ public class SoulCleaningSessionController {
             return modelAndView;
         }
 
-        soulCleaningSessionService.startCleaningSession(option, numberofPages);
+        try {
+            soulCleaningSessionService.startCleaningSession(option, numberofPages);
+        } catch (NoSuchWindowException noSuchWindowException) {
+            modelAndView.addObject("invalidOption", "SoulCleaning Session has been interrupted! Please try again.");
+            return modelAndView;
+        }
+
 
         soulCleaningSessionService.saveCleaningSession(option, numberofPages, timeService.getNumberOfSecondForSoulCleaningSession(), seleniumConnection.getCountPictures());
 
@@ -60,12 +67,23 @@ public class SoulCleaningSessionController {
     }
 
     @GetMapping("myCleaningSessions")
-    public ModelAndView showMyCleaningSessionsPage(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber) {
+    public ModelAndView showMyCleaningSessionsPage(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                                   @RequestParam(value = "option", defaultValue = "sortSessionFirstToLast") String option) {
 
         ModelAndView modelAndView = new ModelAndView("my-cleaning-sessions");
-        modelAndView.addObject("allCleaningSessions", soulCleaningSessionService.getAllByPage(pageNumber));
-        modelAndView.addObject("prevPage", "http://localhost:8080/myCleaningSessions?pageNumber=" + (pageNumber - 1));
-        modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?pageNumber=" + (pageNumber + 1));
+
+        if (option.equals("sortSessionFirstToLast")) {
+            modelAndView.addObject("allCleaningSessions", soulCleaningSessionService.getAllByPage(pageNumber));
+            modelAndView.addObject("prevPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber - 1));
+            modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber + 1));
+        }
+        if (option.equals("sortSessionLastToFirst")) {
+            modelAndView.addObject("allCleaningSessions", soulCleaningSessionService.getAllByPageDesc(pageNumber));
+            modelAndView.addObject("prevPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber - 1));
+            modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber + 1));
+        }
+
+
 
         return modelAndView;
     }

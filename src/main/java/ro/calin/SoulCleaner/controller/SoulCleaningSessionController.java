@@ -1,11 +1,9 @@
 package ro.calin.SoulCleaner.controller;
 
+import org.openqa.selenium.NoSuchWindowException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ro.calin.SoulCleaner.database.SoulCleaningSession;
 import ro.calin.SoulCleaner.database.SoulCleaningSessionDAO;
@@ -43,7 +41,13 @@ public class SoulCleaningSessionController {
             return modelAndView;
         }
 
-        soulCleaningSessionService.startCleaningSession(option, numberofPages);
+        try {
+            soulCleaningSessionService.startCleaningSession(option, numberofPages);
+        } catch (NoSuchWindowException noSuchWindowException) {
+            modelAndView.addObject("invalidOption", "SoulCleaning Session has been interrupted! Please try again.");
+            return modelAndView;
+        }
+
 
         soulCleaningSessionService.saveCleaningSession(option, numberofPages, timeService.getNumberOfSecondForSoulCleaningSession(), seleniumConnection.getCountPictures());
 
@@ -63,12 +67,23 @@ public class SoulCleaningSessionController {
     }
 
     @GetMapping("myCleaningSessions")
-    public ModelAndView showMyCleaningSessionsPage(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber) {
+    public ModelAndView showMyCleaningSessionsPage(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                                   @RequestParam(value = "option", defaultValue = "sortSessionFirstToLast") String option) {
 
         ModelAndView modelAndView = new ModelAndView("my-cleaning-sessions");
-        modelAndView.addObject("allCleaningSessions", soulCleaningSessionService.getAllByPage(pageNumber));
-        modelAndView.addObject("prevPage", "http://localhost:8080/myCleaningSessions?pageNumber=" + (pageNumber - 1));
-        modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?pageNumber=" + (pageNumber + 1));
+
+        if (option.equals("sortSessionFirstToLast")) {
+            modelAndView.addObject("allCleaningSessions", soulCleaningSessionService.getAllByPage(pageNumber));
+            modelAndView.addObject("prevPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber - 1));
+            modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber + 1));
+        }
+        if (option.equals("sortSessionLastToFirst")) {
+            modelAndView.addObject("allCleaningSessions", soulCleaningSessionService.getAllByPageDesc(pageNumber));
+            modelAndView.addObject("prevPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber - 1));
+            modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber + 1));
+        }
+
+
 
         return modelAndView;
     }
@@ -78,23 +93,11 @@ public class SoulCleaningSessionController {
         return new ModelAndView("index");
     }
 
-    @PostMapping("myCleaningSessions/delete-soulcleaningsession")
+    @DeleteMapping("myCleaningSessions/delete-soulcleaningsession")
     @ResponseBody
     public String deleteSoulCleaningSession(@RequestParam("id") int soulCleaningSessionId) {
         soulCleaningSessionService.deleteSoulCleaningSession(soulCleaningSessionId);
 
         return "ok";
-    }
-
-    @GetMapping("getSessionsForAjax")
-    @ResponseBody
-    public List<SoulCleaningSession> getSessionsForAjax() {
-        return soulCleaningSessionService.getAllCleaningSessions();
-    }
-
-    @GetMapping("test")
-    @ResponseBody
-    public void test() {
-
     }
 }

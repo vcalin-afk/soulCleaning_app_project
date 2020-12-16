@@ -135,6 +135,12 @@ public class SoulCleaningSessionService {
         return soulCleaningSessionDAO.findAll(firstPage);
     }
 
+    public Page<SoulCleaningSession> getAllByPageDesc(int pageNumber) {
+        Pageable firstPage = PageRequest.of(pageNumber,6);
+
+        return soulCleaningSessionDAO.findByOrderByIdDesc(firstPage);
+    }
+
     public void setSoulCleaningSessionDAO(SoulCleaningSessionDAO soulCleaningSessionDAO) {
         this.soulCleaningSessionDAO = soulCleaningSessionDAO;
     }

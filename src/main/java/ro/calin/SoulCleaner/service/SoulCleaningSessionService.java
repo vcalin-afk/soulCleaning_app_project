@@ -2,15 +2,14 @@ package ro.calin.SoulCleaner.service;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import ro.calin.SoulCleaner.database.SoulCleaningSession;
-import ro.calin.SoulCleaner.database.SoulCleaningSessionDAO;
-import ro.calin.SoulCleaner.database.SoulCleaningCount;
-import ro.calin.SoulCleaner.database.SoulCleaningTime;
+import ro.calin.SoulCleaner.database.*;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -28,8 +27,11 @@ public class SoulCleaningSessionService {
     @Autowired
     SoulCleaningTime soulCleaningTime;
 
+    private Logger LOG = LoggerFactory.getLogger(SoulCleaningSessionService.class);
+
     public void connect() {
 
+        LOG.info("Ma conectez la Geckodriver.");
         System.setProperty("webdriver.gecko.driver", "C:\\Users\\Calin Valentin\\IdeaProjects\\SoulCleaner\\src\\main\\resources\\static/geckodriver.exe");
 
     }
@@ -40,6 +42,7 @@ public class SoulCleaningSessionService {
 
         FirefoxDriver firefoxDriver = new FirefoxDriver();
 
+        LOG.info("Ma conectez la site-ul Danbooru.");
         firefoxDriver.get("https://danbooru.donmai.us/");
 
         WebElement searchInput = firefoxDriver.findElementByCssSelector("#tags");
@@ -50,13 +53,16 @@ public class SoulCleaningSessionService {
         List<WebElement> pagePosts = firefoxDriver.findElementsByCssSelector(".post-preview");
         int countPictures = 0;
 
+        LOG.info("Incep analizarea pozelor pentru " + numberofPages + " pagini");
         for (int j = 1; j <= numberofPages; j++) {
             for (int i = 0; i < pagePosts.size(); i++) {
                 WebElement image = pagePosts.get(i);
                 try {
+                    LOG.info("Analizez poza.");
                     image.click();
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    LOG.error("Poza este ascunsa in pagina web. Sar peste ea...");
+                    e.printStackTrace();
                     continue;
                 }
 
@@ -69,6 +75,7 @@ public class SoulCleaningSessionService {
                         firefoxDriver.quit();
                         break;
                     }
+                    LOG.info("Trec la pagina urmatoare din pagina web...");
                     WebElement nextPageArrow = firefoxDriver.findElementByCssSelector("#paginator-next");
                     nextPageArrow.click();
                     pagePosts.clear();
@@ -77,8 +84,11 @@ public class SoulCleaningSessionService {
                 }
             }
         }
+        LOG.info("Am terminat de analizat pozele.");
 
+        LOG.info("Setez numarul de poze analizate: " + countPictures);
         soulCleaningCount.setCountPictures(countPictures);
+
         soulCleaningTime.setFinalTime(LocalTime.now());
 
     }
@@ -86,6 +96,9 @@ public class SoulCleaningSessionService {
     public void saveCleaningSession(String option, int numberOfPages, long numberOfSeconds, int numberOfPictures) {
 
         SoulCleaningSession soulCleaningSession = new SoulCleaningSession();
+
+        LOG.info("Incep salvarea sesiunii SoulCleaning in baza de date: option = " + option + ", number of pages = " + numberOfPages +
+                ", number of seconds = " + numberOfSeconds + ", number of pictures = " + numberOfPictures + ", site = Danbooru");
         if (option.equals("")){
             soulCleaningSession.setTag_name("No Tag");
         } else {
@@ -96,6 +109,7 @@ public class SoulCleaningSessionService {
         soulCleaningSession.setPicture_count(numberOfPictures);
         soulCleaningSession.setSite("Danbooru");
 
+        LOG.info("Am terminat de salvat sesiunea SoulCleaning in baza de date.");
         soulCleaningSessionDAO.save(soulCleaningSession);
 
     }
@@ -106,22 +120,27 @@ public class SoulCleaningSessionService {
 
         List<SoulCleaningSession> lastSoulCleaningSessionList = new ArrayList<>();
 
+        LOG.info("Incep sa caut ultima sesiune SoulCleaning...");
         for (SoulCleaningSession soulCleaningSession: soulCleaningSessions) {
             lastSoulCleaningSessionList.add(soulCleaningSession);
             break;
         }
+
+        LOG.info("Intorc ultima sesiune SoulCleaning.");
         return lastSoulCleaningSessionList;
 
     }
 
     public void deleteSoulCleaningSession(int soulCleaningSessionId) {
 
+        LOG.info("Sterg sesiunea SoulCleaning cu id-ul " + soulCleaningSessionId);
         soulCleaningSessionDAO.deleteById(soulCleaningSessionId);
 
     }
 
     public List<SoulCleaningSession> findDesc() {
 
+        LOG.info("Intorc sesiunile SoulCleaning in ordine descrescatoare.");
         return soulCleaningSessionDAO.findByOrderByIdDesc();
 
     }
@@ -130,6 +149,7 @@ public class SoulCleaningSessionService {
 
         Pageable firstPage = PageRequest.of(pageNumber,6);
 
+        LOG.info("Intorc sesiunile SoulCleaning pentru pagina " + pageNumber + ",in ordine crescatoare.");
         return soulCleaningSessionDAO.findAll(firstPage);
 
     }
@@ -138,6 +158,7 @@ public class SoulCleaningSessionService {
 
         Pageable firstPage = PageRequest.of(pageNumber,6);
 
+        LOG.info("Intorc sesiunile SoulCleaning pentru pagina " + pageNumber + ",in ordine descrescatoare.");
         return soulCleaningSessionDAO.findByOrderByIdDesc(firstPage);
 
     }

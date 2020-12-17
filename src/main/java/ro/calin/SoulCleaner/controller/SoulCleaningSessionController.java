@@ -1,6 +1,8 @@
 package ro.calin.SoulCleaner.controller;
 
 import org.openqa.selenium.NoSuchWindowException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,8 @@ public class SoulCleaningSessionController {
     @Autowired
     SoulCleaningTimeService soulCleaningTimeService;
 
+    private Logger LOG = LoggerFactory.getLogger(SoulCleaningSessionController.class);
+
     @GetMapping("/activate-session")
     public ModelAndView activateSession(@RequestParam("options") String option,
                                           @RequestParam("numberOfPages") int numberofPages) {
@@ -30,6 +34,7 @@ public class SoulCleaningSessionController {
         ModelAndView modelAndView = new ModelAndView("index");
 
         if (option.equals("disabledOption")) {
+            LOG.info("Optiunea invalida a fost aleasa: " + option + ". Redirectionez inapoi la pagina de index.");
             modelAndView.addObject("invalidOption", "Choose one tag from the dropdown menu");
             return modelAndView;
         }
@@ -37,10 +42,12 @@ public class SoulCleaningSessionController {
         try {
             soulCleaningSessionService.startCleaningSession(option, numberofPages);
         } catch (NoSuchWindowException noSuchWindowException) {
+            LOG.error("Sesiunea SoulCleaning a fost intrerupta. Redirectionez inapoi la pagina de index.");
+            noSuchWindowException.printStackTrace();
+
             modelAndView.addObject("invalidOption", "SoulCleaning Session has been interrupted! Please try again.");
             return modelAndView;
         }
-
 
         soulCleaningSessionService.saveCleaningSession(option, numberofPages, soulCleaningTimeService.getNumberOfSecondForSoulCleaningSession(), soulCleaningCount.getCountPictures());
 
@@ -55,6 +62,7 @@ public class SoulCleaningSessionController {
             modelAndView.addObject("tagChosen", option);
         }
 
+        LOG.info("Afisez ultima sesiune SoulCleaning in pagina de index.");
         return modelAndView;
 
     }
@@ -76,6 +84,7 @@ public class SoulCleaningSessionController {
             modelAndView.addObject("nextPage", "http://localhost:8080/myCleaningSessions?option=" + option + "&pageNumber=" + (pageNumber + 1));
         }
 
+        LOG.info("Afisez pagina web my-cleaning-sessions.");
         return modelAndView;
 
     }
@@ -83,6 +92,7 @@ public class SoulCleaningSessionController {
     @GetMapping("dashboard")
     public ModelAndView showIndexPage() {
 
+        LOG.info("Afisez pagina de index.");
         return new ModelAndView("index");
 
     }

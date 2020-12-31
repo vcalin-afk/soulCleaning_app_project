@@ -75,7 +75,7 @@ public class SoulCleaningSessionService {
                         firefoxDriver.quit();
                         break;
                     }
-                    LOG.info("Trec la pagina urmatoare din pagina web...");
+                    LOG.info("Trec la pagina urmatoare din site-ul web...");
                     WebElement nextPageArrow = firefoxDriver.findElementByCssSelector("#paginator-next");
                     nextPageArrow.click();
                     pagePosts.clear();
@@ -168,4 +168,16 @@ public class SoulCleaningSessionService {
         this.soulCleaningSessionDAO = soulCleaningSessionDAO;
 
     }
+
+    public void setSoulCleaningTime(SoulCleaningTime soulCleaningTime) {
+        this.soulCleaningTime = soulCleaningTime;
+    }
+
+    public void setSoulCleaningCount(SoulCleaningCount soulCleaningCount) {
+        this.soulCleaningCount = soulCleaningCount;
+    }
+
+
+
+
 }

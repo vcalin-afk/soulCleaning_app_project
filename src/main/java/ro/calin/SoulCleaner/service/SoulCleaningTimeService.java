@@ -23,4 +23,7 @@ public class SoulCleaningTimeService {
 
     }
 
+    public void setSoulCleaningTime(SoulCleaningTime soulCleaningTime) {
+        this.soulCleaningTime = soulCleaningTime;
+    }
 }
